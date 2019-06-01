@@ -1,6 +1,16 @@
 package com.chirag.retrofitdemo.service;
 
+import android.util.Log;
+
+import com.chirag.retrofitdemo.utils.Constants;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -8,7 +18,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitInstance {
 
     private static Retrofit retrofit = null;
-    private static String BASE_URL = "http://services.groupkt.com/";
 
     public static GetCountryDataService getService() {
 
@@ -21,11 +30,16 @@ public class RetrofitInstance {
 
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(httpLoggingInterceptor)
+                    .connectTimeout(1, TimeUnit.MINUTES)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .writeTimeout(15, TimeUnit.SECONDS)
+                    .retryOnConnectionFailure(true)
                     .build();
+
 
             retrofit = new Retrofit
                     .Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(Constants.Urls.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(okHttpClient)
                     .build();
