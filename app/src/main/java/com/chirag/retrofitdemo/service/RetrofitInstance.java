@@ -36,7 +36,6 @@ public class RetrofitInstance {
                     .retryOnConnectionFailure(true)
                     .build();
 
-
             retrofit = new Retrofit
                     .Builder()
                     .baseUrl(Constants.Urls.BASE_URL)
